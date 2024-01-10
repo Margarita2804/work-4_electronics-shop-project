@@ -1,6 +1,7 @@
 import pytest
 
 from src.item import Item
+from config import TEST_CSV
 
 
 def test_init():
@@ -29,3 +30,25 @@ def test_apply_discount(my_object):
     my_object.pay_rate = 1.5
     my_object.apply_discount()
     assert my_object.price == 15000
+
+
+def test_name_setter(my_object):
+    my_object.name = 'Телефон'
+    assert my_object.name == 'Телефон'
+    # with pytest.raises(Exception):
+    #     my_object.name = 'Супертелефон'
+    my_object.name = 'Супертелефон'
+    assert my_object.name == 'Супертелеф'
+
+
+def test_instantiate_from_csv():
+    Item.instantiate_from_csv(TEST_CSV)
+    assert len(Item.all) == 5
+    item1 = Item.all[0]
+    assert item1.name == 'Смартфон'
+
+
+def test_string_to_number():
+    assert Item.string_to_number('5') == 5
+    assert Item.string_to_number('5.0') == 5
+    assert Item.string_to_number('5.5') == 5
