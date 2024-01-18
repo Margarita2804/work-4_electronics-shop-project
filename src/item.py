@@ -28,6 +28,12 @@ class Item:
     def __str__(self):
         return f'{self.__name}'
 
+    def __add__(self, other):
+        if isinstance(other, self.__class__) or issubclass(self.__class__, other.__class__):
+            return self.quantity + other.quantity
+        else:
+            raise ValueError("Складывать можно только экземпляры класса")
+
     @property
     def name(self):
         return self.__name
