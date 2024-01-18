@@ -1,6 +1,7 @@
 import pytest
 
 from src.item import Item
+from src.phone import Phone
 from config import TEST_CSV
 
 
@@ -60,3 +61,14 @@ def test__repr_(my_object):
 
 def test__str_(my_object):
     assert str(my_object) == 'Смартфон'
+
+
+def test__add_(my_object):
+    phone1 = Phone("iPhone 14", 120_000, 5, 2)
+    assert my_object + phone1 == 25
+    assert phone1 + phone1 == 10
+    assert my_object + my_object == 40
+    assert phone1 + my_object == 25
+    with pytest.raises(ValueError, match="Складывать можно только экземпляры класса"):
+        my_object + 5
+        my_object + "Hello"
