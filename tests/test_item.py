@@ -2,7 +2,8 @@ import pytest
 
 from src.item import Item
 from src.phone import Phone
-from config import TEST_CSV
+from config import TEST_CSV, TEST_CSV_CRAZY
+from src.exceptions import InstantiateCSVError
 
 
 def test_init():
@@ -72,3 +73,14 @@ def test__add_(my_object):
     with pytest.raises(ValueError, match="Складывать можно только экземпляры класса"):
         my_object + 5
         my_object + "Hello"
+
+
+def test_instantiate_from_csv_not_found():
+    with pytest.raises(FileNotFoundError):
+        Item.instantiate_from_csv("test")
+        Item.instantiate_from_csv("")
+
+
+def test_instantiate_from_csv_key_error():
+    with pytest.raises(InstantiateCSVError):
+        Item.instantiate_from_csv(TEST_CSV_CRAZY)
