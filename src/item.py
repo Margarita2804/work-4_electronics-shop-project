@@ -1,5 +1,6 @@
 import csv
 from config import ROOT_DIR
+from src.exceptions import InstantiateCSVError
 
 
 class Item:
@@ -63,13 +64,21 @@ class Item:
     @classmethod
     def instantiate_from_csv(cls, path_file):
         cls.all.clear()
-        with open(ROOT_DIR + '/' + path_file, encoding='cp1251') as file:
-            data_csv = csv.DictReader(file)
-            for item in data_csv:
-                name = item['name']
-                price = float(item['price'])
-                quantity = int(item['quantity'])
-                cls(name, price, quantity)
+        try:
+            with open(ROOT_DIR + '/' + path_file, encoding='cp1251') as file:
+                data_csv = csv.DictReader(file)
+                for item in data_csv:
+                    try:
+                        name = item['name']
+                        price = float(item['price'])
+                        quantity = int(item['quantity'])
+                        cls(name, price, quantity)
+                    except KeyError:
+                        raise InstantiateCSVError("Файл item.csv поврежден")
+        except FileNotFoundError:
+            raise FileNotFoundError("Отсутствует файл item.csv")
+
+
 
     @staticmethod
     def string_to_number(number):
